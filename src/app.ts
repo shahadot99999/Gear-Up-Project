@@ -3,6 +3,7 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import "dotenv/config";
 import cors from "cors";
 import config from "./config";
+import { prisma } from "./lib/prisma";
 
 
 //import { config } from "dotenv";
@@ -22,8 +23,9 @@ app.use(express.urlencoded({extended : true}));
 app.use(cookieParser());
 
 
-app.get("/", (req:Request, res: Response)=>{
-   
+app.get("/", async(req:Request, res: Response)=>{
+   const user= await prisma.user.findMany()
+   console.log(user);
     res.send("Hello World");
 })
 

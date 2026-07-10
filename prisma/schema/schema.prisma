@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// Import enums first (so models can reference them)
+//import { Role, OrderStatus, PaymentStatus } from "./schema/enums.prisma";
+
+// Then import all models
+// import { User } from "./schema/user.prisma";
+// import { Category } from "./schema/category.prisma";
+// import { GearItem } from "./schema/gear.prisma";
+// import { RentalOrder } from "./schema/rental.prisma";
+// import { Payment } from "./schema/payment.prisma";
+// import { Review } from "./schema/review.prisma";

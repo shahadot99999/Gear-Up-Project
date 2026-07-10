@@ -1,0 +1,14 @@
+model Payment {
+  id            String       @id @default(cuid())
+  rentalOrderId String
+  amount        Float
+  method        String       // stripe, sslcommerz
+  provider      String       // stripe, sslcommerz
+  transactionId String       // from payment gateway
+  status        PaymentStatus @default(PENDING)
+  paidAt        DateTime?
+  createdAt     DateTime     @default(now())
+
+  // Relations
+  rentalOrder   RentalOrder  @relation(fields: [rentalOrderId], references: [id])
+}
