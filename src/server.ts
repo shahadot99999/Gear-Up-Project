@@ -1,11 +1,12 @@
  import app from "./app.js";
+import config from "./config/index.js";
 import { prisma } from "./lib/prisma.js";
 
 
 
 
- const PORT = process.env.PORT || 5000;
-//const PORT = config.port;
+// const PORT = process.env.PORT || 5000;
+const PORT = config.port;
 //const PORT = 5000;
 
 async function main() {
