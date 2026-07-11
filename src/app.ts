@@ -4,6 +4,10 @@ import "dotenv/config";
 import cors from "cors";
 import config from "./config";
 import { prisma } from "./lib/prisma";
+import  httpStatus  from "http-status";
+
+import authRoutes from "./modules/auth/auth.route";
+import bcrypt from "bcryptjs";
 
 
 //import { config } from "dotenv";
@@ -24,13 +28,68 @@ app.use(cookieParser());
 
 
 app.get("/", async(req:Request, res: Response)=>{
-   const user= await prisma.user.findMany()
-   console.log(user);
+   //const user= await prisma.user.findMany()
+   //console.log(user);
     res.send("Hello World");
 })
 
 //app.post()
 
+// ... middlewares ...
+
+//app.use('/api/auth', authRoutes);  // <-- mount routes
+
+app.post("/api/users/register", async(req:Request, res: Response)=>{
+
+    // const payload = req.body;
+    // console.log(payload);
+
+    const {email,password, name, role }=req.body;
+
+    const isUserExist = await prisma.user.findUnique({
+        where:{email}
+    })
+
+    if(isUserExist){
+    throw new Error("User with this email already exists");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+
+  const createdUser = await prisma.user.create({
+    data: {
+        name,
+        email,
+        password: hashedPassword,
+        role
+       
+
+    }
+});
+
+
+  const user = await prisma.user.findUnique({
+    where:{
+        id: createdUser.id,
+        email : createdUser.email || email
+    },
+    omit: {
+    password: true
+    },
+    
+})
+
+
+
+    res.status(httpStatus.CREATED).json({
+        success: true,
+        statusCode: httpStatus.CREATED,
+        message: "User registered successfully",
+        data:{
+            user
+        }
+    });
+})
 
 
 export default app; 
