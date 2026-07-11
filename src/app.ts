@@ -8,6 +8,7 @@ import  httpStatus  from "http-status";
 
 import authRoutes from "./modules/auth/auth.route";
 import bcrypt from "bcryptjs";
+import { userRoutes } from "./modules/user/user.route";
 
 
 //import { config } from "dotenv";
@@ -39,57 +40,61 @@ app.get("/", async(req:Request, res: Response)=>{
 
 //app.use('/api/auth', authRoutes);  // <-- mount routes
 
-app.post("/api/users/register", async(req:Request, res: Response)=>{
+// app.post("/api/users/register", async(req:Request, res: Response)=>{
 
-    // const payload = req.body;
-    // console.log(payload);
+//     // const payload = req.body;
+//     // console.log(payload);
 
-    const {email,password, name, role }=req.body;
+//     const {email,password, name, role }=req.body;
 
-    const isUserExist = await prisma.user.findUnique({
-        where:{email}
-    })
+//     const isUserExist = await prisma.user.findUnique({
+//         where:{email}
+//     })
 
-    if(isUserExist){
-    throw new Error("User with this email already exists");
-  }
+//     if(isUserExist){
+//     throw new Error("User with this email already exists");
+//   }
 
-  const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+//   const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
 
-  const createdUser = await prisma.user.create({
-    data: {
-        name,
-        email,
-        password: hashedPassword,
-        role
+//   const createdUser = await prisma.user.create({
+//     data: {
+//         name,
+//         email,
+//         password: hashedPassword,
+//         role
        
 
-    }
-});
+//     }
+// });
 
 
-  const user = await prisma.user.findUnique({
-    where:{
-        id: createdUser.id,
-        email : createdUser.email || email
-    },
-    omit: {
-    password: true
-    },
+//   const user = await prisma.user.findUnique({
+//     where:{
+//         id: createdUser.id,
+//         email : createdUser.email || email
+//     },
+//     omit: {
+//     password: true
+//     },
     
-})
+// })
 
 
 
-    res.status(httpStatus.CREATED).json({
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: "User registered successfully",
-        data:{
-            user
-        }
-    });
-})
+//     res.status(httpStatus.CREATED).json({
+//         success: true,
+//         statusCode: httpStatus.CREATED,
+//         message: "User registered successfully",
+//         data:{
+//             user
+//         }
+//     });
+// })
+
+//app.use("/api/users", userRoutes);
+
+app.use("/api/auth/", userRoutes);
 
 
 export default app; 
