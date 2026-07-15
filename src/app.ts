@@ -6,9 +6,11 @@ import config from "./config";
 import { prisma } from "./lib/prisma";
 import  httpStatus  from "http-status";
 
-import authRoutes from "./modules/auth/auth.route";
+
 import bcrypt from "bcryptjs";
 import { userRoutes } from "./modules/user/user.route";
+import { authRoutes } from "./modules/auth/auth.route";
+
 
 
 //import { config } from "dotenv";
@@ -94,7 +96,11 @@ app.get("/", async(req:Request, res: Response)=>{
 
 //app.use("/api/users", userRoutes);
 
-app.use("/api/auth/", userRoutes);
+app.use("/api/auth", authRoutes);
+
+app.use("/api/auth", userRoutes);
+
+
 
 
 export default app; 

@@ -1,64 +1,52 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from '../../config';  // correct relative path
-import { IRegisterPayload, ILoginPayload } from './auth.interface'; // import from same folder
+import bcrypt from "bcryptjs";
+import { prisma } from "../../lib/prisma";
+import { ILoginUser } from "./auth.interface"
+import { jwtUtils } from "../../utils/jwt";
+import config from "../../config";
+import { SignOptions } from "jsonwebtoken";
 
-const prisma = new PrismaClient();
 
-export const register = async (payload: IRegisterPayload) => {
-  const { email, password, name, role } = payload;
+const loginUser = async(payload: ILoginUser)=>{
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
-  });
-  if (existingUser) {
-    throw new Error('User already exists with this email');
-  }
+    const {email, password}= payload;
 
-  const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds) || 10);
+    const user = await prisma.user.findUniqueOrThrow({
+        where: {email}
+    })
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      name,
-      role,
-    },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      isActive: true,
-      createdAt: true,
-    },
-  });
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-  return user;
-};
+    if(!isPasswordMatch){
+        throw new Error("Password is incorrect");
+    }
 
-export const login = async (payload: ILoginPayload) => {
-//   const { email, password } = payload;
+     const jwtPayload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
 
-//   const user = await prisma.user.findUnique({
-//     where: { email },
-//   });
-//   if (!user) {
-//     throw new Error('Invalid credentials');
-//   }
+     const accessToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_access_secret,
+        config.jwt_access_expires_in as SignOptions
+    );
 
-//   const isMatch = await bcrypt.compare(password, user.password);
-//   if (!isMatch) {
-//     throw new Error('Invalid credentials');
-//   }
+      const refreshToken = jwtUtils.createToken(
+        jwtPayload,
+        config.jwt_refresh_secret,
+        config.jwt_refresh_expires_in as SignOptions
+    );
 
-//   const token = jwt.sign(
-//     { id: user.id, email: user.email, role: user.role },
-//     config.jwt_access_secret!,
-//     { expiresIn: config.jwt_access_expires_in }
-//   );
+    //return user;
 
-//   const { password: _, ...userWithoutPassword } = user;
-//   return { user: userWithoutPassword, token };
-// };
+    return {
+        accessToken,
+        refreshToken
+    };
+}
+
+export const authService = {
+    loginUser
+}
