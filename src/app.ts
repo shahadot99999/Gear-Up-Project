@@ -10,6 +10,7 @@ import  httpStatus  from "http-status";
 import bcrypt from "bcryptjs";
 import { userRoutes } from "./modules/user/user.route";
 import { authRoutes } from "./modules/auth/auth.route";
+import { gearRoutes } from './modules/gear/gear.route';
 
 
 
@@ -99,6 +100,8 @@ app.get("/", async(req:Request, res: Response)=>{
 app.use("/api/auth", authRoutes);
 
 app.use("/api/auth", userRoutes);
+
+app.use("/api/gear", gearRoutes);
 
 
 
