@@ -11,6 +11,7 @@ import bcrypt from "bcryptjs";
 import { userRoutes } from "./modules/user/user.route";
 import { authRoutes } from "./modules/auth/auth.route";
 import { gearRoutes } from './modules/gear/gear.route';
+import { providerRoutes } from "./modules/provider/provider.route";
 
 
 
@@ -102,6 +103,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth", userRoutes);
 
 app.use("/api/gear", gearRoutes);
+
+app.use("/api/provider", providerRoutes);
 
 
 
