@@ -13,6 +13,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { gearRoutes } from './modules/gear/gear.route';
 import { providerRoutes } from "./modules/provider/provider.route";
 import { rentalRoutes } from "./modules/rental/rental.route";
+import { paymentRoutes } from './modules/payment/payment.route';
 
 
 
@@ -26,7 +27,8 @@ app.use(cors({
 }))
 
 
-
+//app.use("/api/subscription/webhook", express.raw({ type: 'application/json' }))
+//app.use("/api/payments/confirm", express.raw({ type: 'application/json' }));
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
@@ -109,6 +111,7 @@ app.use("/api/provider", providerRoutes);
 
 app.use("/api/rentals", rentalRoutes);
 
+app.use("/api/payments", paymentRoutes);
 
 
 
