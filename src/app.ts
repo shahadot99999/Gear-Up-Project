@@ -15,6 +15,7 @@ import { providerRoutes } from "./modules/provider/provider.route";
 import { rentalRoutes } from "./modules/rental/rental.route";
 import { paymentRoutes } from './modules/payment/payment.route';
 import { reviewRoutes } from "./modules/review/review.route";
+import { adminRoutes } from "./modules/admin/admin.route";
 
 
 
@@ -116,6 +117,7 @@ app.use("/api/payments", paymentRoutes);
 
 app.use('/api/reviews', reviewRoutes);
 
+app.use('/api/admin', adminRoutes);
 
 
 export default app; 
