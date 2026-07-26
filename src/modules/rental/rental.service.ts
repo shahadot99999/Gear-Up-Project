@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 const createRentalOrder = async (payload: any, customerId: string) => {
     const { gearItemId, startDate, endDate, totalPrice } = payload;
 
-    // Check if the gear item actually exists and is available
+    
     const gearItem = await prisma.gearItem.findUnique({ where: { id: gearItemId } });
     if (!gearItem) {
         throw new Error("The requested gear item does not exist.");

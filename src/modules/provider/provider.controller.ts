@@ -50,19 +50,19 @@ const deleteGear = async (req: Request, res: Response) => {
     }
 };
 
-// const getIncomingOrders = async (req: Request, res: Response) => {
-//     try {
-//         const userId = (req as any).user?.id;
-//         const result = await providerService.getIncomingOrders(userId);
-//         res.status(200).json({
-//             success: true,
-//             message: "Incoming rental orders fetched successfully!",
-//             data: result
-//         });
-//     } catch (error: any) {
-//         res.status(500).json({ success: false, message: "Failed to fetch orders", errorDetails: error.message });
-//     }
-// };
+const getIncomingOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    const result = await providerService.getIncomingOrders(userId);
+    res.status(200).json({
+      success: true,
+      message: "Incoming rental orders fetched successfully!",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: "Failed to fetch orders", errorDetails: error.message });
+  }
+};
 
 const updateOrderStatus = async (req: Request, res: Response) => {
     try {
@@ -85,6 +85,6 @@ export const providerController = {
     addGear,
     updateGear,
     deleteGear,
-    //getIncomingOrders,
+    getIncomingOrders,
     updateOrderStatus
 };

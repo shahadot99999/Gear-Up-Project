@@ -1,6 +1,6 @@
 import { prisma } from '../../lib/prisma';
 
-// 1. Get all users
+
 const getAllUsers = async () => {
   const users = await prisma.user.findMany({
     select: {
@@ -16,7 +16,7 @@ const getAllUsers = async () => {
   return users;
 };
 
-// 2. Update user status (suspend/activate)
+
 const updateUserStatus = async (userId: string, isActive: boolean) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -41,7 +41,7 @@ const updateUserStatus = async (userId: string, isActive: boolean) => {
   return updatedUser;
 };
 
-// 3. Get all gear listings
+
 const getAllGear = async () => {
   const gearItems = await prisma.gearItem.findMany({
     include: {
@@ -58,7 +58,7 @@ const getAllGear = async () => {
   return gearItems;
 };
 
-// 4. Get all rental orders
+
 const getAllRentals = async () => {
   const rentals = await prisma.rentalOrder.findMany({
     include: {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { gearService } from "./gear.service";
 
-// Controller for POST /api/gears
+
 const createGear = async (req: Request, res: Response) => {
     try {
         const payload = req.body;
@@ -23,7 +23,7 @@ const createGear = async (req: Request, res: Response) => {
     }
 };
 
-// Controller for GET /api/gears (with filtering)
+
 const getAllGear = async (req: Request, res: Response) => {
     try {
         // Collects query params from Postman like ?brand=Trek or ?maxPrice=50
@@ -44,7 +44,7 @@ const getAllGear = async (req: Request, res: Response) => {
     }
 };
 
-// Controller for GET /api/gears/:id
+
 const getGearById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

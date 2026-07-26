@@ -10,7 +10,7 @@ const addGear = async (payload: any, userId: string) => {
 };
 
 const updateGear = async (id: string, payload: any, userId: string) => {
-    // Validate ownership before updating
+    
     const existingGear = await prisma.gearItem.findUnique({ where: { id } });
     if (!existingGear || existingGear.providerId !== userId) {
         throw new Error("Unauthorized or gear item not found");
@@ -29,34 +29,47 @@ const deleteGear = async (id: string, userId: string) => {
     });
 };
 
-// const getIncomingOrders = async (userId: string) => {
-//     // Looks up rental orders containing gear that belongs to this specific provider
-//     return await prisma.rentalOrder.findMany({
-//         where: {
-//             rentals: {
-//                 some: {
-//                     providerId: userId
-//                 }
-//             }
-//         },
-//         include: {
-//             user: { select: { name: true, email: true } }
-//         }
-//     });
-// };
+const getIncomingOrders = async (userId: string) => {
+  return await prisma.rentalOrder.findMany({
+    where: {
+      gearItem: {
+        providerId: userId,
+      },
+    },
+    include: {
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      gearItem: true,
+      payments: true,
+    },
+  });
+};
 
 const updateOrderStatus = async (id: string, status: any, userId: string) => {
-    // Updates global rental workflow status
-    return await prisma.rentalOrder.update({
-        where: { id },
-        data: { status }
-    });
+  const order = await prisma.rentalOrder.findUnique({
+    where: { id },
+    include: { gearItem: true },
+  });
+
+  if (!order || order.gearItem.providerId !== userId) {
+    throw new Error("Unauthorized or rental order not found");
+  }
+
+  return await prisma.rentalOrder.update({
+    where: { id },
+    data: { status },
+  });
 };
 
 export const providerService = {
     addGear,
     updateGear,
     deleteGear,
-    //getIncomingOrders,
+    getIncomingOrders,
     updateOrderStatus
 };
