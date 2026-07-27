@@ -10,7 +10,7 @@ const router = Router();
 router.post('/create', auth(), paymentController.createPaymentIntent);
 
 
-
+//confirm route set up
 router.post('/confirm', auth(), paymentController.confirmPayment);
 
 
