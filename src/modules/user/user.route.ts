@@ -14,10 +14,11 @@ import { auth } from '../../middlewares/auth';
 
 const router = Router();
 
+//create post
 router.post("/register", userController.registerUser );
 
 
-
+//profile my route
 router.get("/me", 
     
 auth(Role.ADMIN, Role.CUSTOMER, Role.PROVIDER),
